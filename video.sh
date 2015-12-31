@@ -22,17 +22,17 @@ systemctl enable bumblebeed.service
 print_message "Adding to black list nouveau"
 echo "blacklist nouveau" > /etc/modprobe.d/modprobe.conf
 print_message "Editing bumblebee.conf"
-sed -i -e 's/Driver=/Driver=nvidia/g' /etc/bumblebee/bumblebee.conf
-sed -i -e 's/Bridge=auto/Bridge=virualgl/g' /etc/bumblebee/bumblebee.conf
+sed -i -e 's/^Driver=$/Driver=nvidia/gm' /etc/bumblebee/bumblebee.conf
+sed -i -e 's/^Bridge=auto$/Bridge=virualgl/g' /etc/bumblebee/bumblebee.conf
 print_message "Editing mkinitcpio.conf"
-sed -i -e 's/MODULES=\"\"/MODULES=\"i915 bbswitch\"/g' /etc/mkinitcpio.conf
+sed -i -e 's/^MODULES=\"\"$/MODULES=\"i915 bbswitch\"/gm' /etc/mkinitcpio.conf
 print_message "Making initcpio"
 mkinitcpio -p linux
 print_message "Configuring grub"
-sed -i -e 's/GRUB_CMDLINE_LINUX_DEFAULT=\"quiet\"/GRUB_CMDLINE_LINUX_DEFAULT=\"rcutree.rcu_idle_gp_delay=1\"/g' /etc/default/grub
+sed -i -e 's/^GRUB_CMDLINE_LINUX_DEFAULT=\"quiet\"$/GRUB_CMDLINE_LINUX_DEFAULT=\"rcutree.rcu_idle_gp_delay=1\"/gm' /etc/default/grub
 grub-mkconfig -o /boot/grub/grub.cfg
 print_message "Fixing xorg"
-sed -i -e 's/#   BusID \"PCI:01:00:0\"/    BusID \"PCI:01:00:0\"/g' /etc/bumblebee/xorg.conf.nvidia
+sed -i -e 's/^#   BusID \"PCI:01:00:0\"$/    BusID \"PCI:01:00:0\"/gm' /etc/bumblebee/xorg.conf.nvidia
 print_message "Do you wish to reboot?"
 select yn in "Yes" "No"; do
   case $yn in
